@@ -22,10 +22,30 @@ function createHTMLString(item) {
     `;
 }
 
+function onButtonClick(event, items) {
+    const dataset = event.target.dataset;
+    const key = dataset.key;
+    const value = dataset.value;
+
+    if (key == null || value == null) {
+        return;
+    }
+    const filtered = items.filter(item => item[key] === value); //파이썬 딕셔너리와 비슷 (정보공유방) 값을 구하기 위해 [key]'키'를 이용하는 것
+    //console.log(filtered);
+    displayItems(filtered);
+}
+
+function setEventListeners(items) {
+    const logo = document.querySelector('.logo');
+    const buttons = document.querySelector('.buttons');
+    logo.addEventListener('click', () => displayItems(items));
+    buttons.addEventListener('click', event => onButtonClick(event, items));
+}
+
 //main
 loadItems() // 아이템들을 동적으로 받아와서
 .then(items => { //프로미스가 리턴이 되면
     displayItems(items); //아이템들을 html에 보여줌
-    // setEventListeners(items) // 받아온 아이템들을 이용해서 버튼을 누르면 필터링을 해줘야해서 이벤트리스너 추가
+    setEventListeners(items) // 받아온 아이템들을 이용해서 버튼을 누르면 필터링을 해줘야해서 이벤트리스너 추가
 })
 .catch(console.log) //에러일때
